@@ -5,3 +5,12 @@ variable "environment" {
 variable "region" {
   description = "AWS Region"
 }
+
+variable "base_cidr" {
+  description = "Base CIDR"
+}
+
+variable "ssh_source_whitelist" {
+  description = "SSH Whitelist IPs"
+  type        = list(string)
+}
