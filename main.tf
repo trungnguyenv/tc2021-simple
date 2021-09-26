@@ -78,19 +78,19 @@ resource "aws_key_pair" "deployer" {
 
 resource "aws_security_group" "default" {
   vpc_id = aws_vpc.main.id
-  name = "${var.environment}-default"
+  name   = "${var.environment}-default"
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
     ipv6_cidr_blocks = ["::/0"]
   }
 }
@@ -110,43 +110,43 @@ resource "aws_security_group" "private_access" {
 
 resource "aws_security_group" "www" {
   vpc_id = aws_vpc.main.id
-  name = "${var.environment}-www"
+  name   = "${var.environment}-www"
 
   ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
     ipv6_cidr_blocks = ["::/0"]
   }
 
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
     ipv6_cidr_blocks = ["::/0"]
   }
 }
 
 resource "aws_instance" "app_server" {
-  ami             = data.aws_ami.amazon_linux_2_ami.id
-  instance_type   = "t2.micro"
-  key_name        = aws_key_pair.deployer.key_name
-  subnet_id       = aws_subnet.public.id
-  security_groups = [
+  ami           = data.aws_ami.amazon_linux_2_ami.id
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.deployer.key_name
+  subnet_id     = aws_subnet.public.id
+  vpc_security_group_ids = [
     aws_security_group.default.id,
     aws_security_group.www.id,
     aws_security_group.private_access.id
